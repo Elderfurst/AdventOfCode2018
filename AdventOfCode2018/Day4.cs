@@ -42,12 +42,63 @@ namespace AdventOfCode2018
 
             guardLogs.Sort();
 
-            var guardData = new List<Tuple<int, int, int[]>>();
+            var guardRecords = new List<GuardRecord>();
+
+            var currentGuard = 0;
+            var sleepMinute = 0;
 
             foreach(var log in guardLogs)
             {
+                if(log.GuardId != 0)
+                {
+                    currentGuard = log.GuardId;
+                    if (guardRecords.Count(x => x.GuardId == log.GuardId) == 0)
+                    {
+                        var minutesAsleep = new Dictionary<int, int>();
+                        for(var i = 0; i < 60; i++)
+                        {
+                            minutesAsleep.Add(i, 0);
+                        }
+                        guardRecords.Add(new GuardRecord
+                        {
+                            GuardId = log.GuardId,
+                            TotalMinutesAsleep = 0,
+                            MinutesAsleep = minutesAsleep
 
+                        });
+                    }
+                }
+                else
+                {
+                    if(log.LogText == "falls asleep")
+                    {
+                        sleepMinute = log.Minute;
+                    }
+                    else if(log.LogText == "wakes up")
+                    {
+                        var guardRecord = guardRecords.First(x => x.GuardId == currentGuard);
+                        guardRecord.TotalMinutesAsleep += log.Minute - sleepMinute;
+                        for(var i = sleepMinute; i < log.Minute; i++)
+                        {
+                            guardRecord.MinutesAsleep[i]++;
+                        }
+                    }
+                }
             }
+
+            var sleepiestGuard = guardRecords.OrderByDescending(x => x.TotalMinutesAsleep).First();
+            var sleepiestMinute = 0;
+            var amountSlept = 0;
+            for(var i = 0; i < 60; i++)
+            {
+                if(sleepiestGuard.MinutesAsleep[i] > amountSlept)
+                {
+                    amountSlept = sleepiestGuard.MinutesAsleep[i];
+                    sleepiestMinute = i;
+                }
+            }
+
+            Console.WriteLine(sleepiestMinute * sleepiestGuard.GuardId);
         }
 
         private void PartTwo()
@@ -88,5 +139,12 @@ namespace AdventOfCode2018
 
             return result;
         }
+    }
+
+    class GuardRecord
+    {
+        public int GuardId { get; set; }
+        public int TotalMinutesAsleep { get; set; }
+        public Dictionary<int, int> MinutesAsleep { get; set; }
     }
 }
