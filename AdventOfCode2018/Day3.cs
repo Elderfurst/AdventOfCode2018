@@ -78,10 +78,5 @@ namespace AdventOfCode2018
             Console.WriteLine("Total number of overlapping spaces: " + count);
             Console.WriteLine("Id of claim that doesn't overlap: " + intactClaimIds.First());
         }
-
-        private void PartTwo()
-        {
-
-        }
     }
 }
