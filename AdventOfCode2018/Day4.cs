@@ -10,10 +10,10 @@ namespace AdventOfCode2018
         private static readonly string[] _inputs = File.ReadAllText(@"Inputs/Day4.txt").Split(new String[] { "\r\n" }, StringSplitOptions.None).ToArray();
         public void Run()
         {
-            PartOne();
+            PartOneAndTwo();
         }
 
-        private void PartOne()
+        private void PartOneAndTwo()
         {
             var guardLogs = new List<GuardLog>();
 
@@ -99,11 +99,33 @@ namespace AdventOfCode2018
             }
 
             Console.WriteLine(sleepiestMinute * sleepiestGuard.GuardId);
-        }
 
-        private void PartTwo()
-        {
+            var mostAsleepGuard = 0;
+            var mostAsleepMinute = 0;
+            var sleptAmount = 0;
 
+            foreach (var record in guardRecords)
+            {
+                var minute = 0;
+                var total = 0;
+                for (var i = 0; i < 60; i++)
+                {
+                    if (record.MinutesAsleep[i] > total)
+                    {
+                        total = record.MinutesAsleep[i];
+                        minute = i;
+                    }
+                }
+
+                if(total > sleptAmount)
+                {
+                    sleptAmount = total;
+                    mostAsleepGuard = record.GuardId;
+                    mostAsleepMinute = minute;
+                }
+            }
+
+            Console.WriteLine(mostAsleepGuard * mostAsleepMinute);
         }
     }
 
