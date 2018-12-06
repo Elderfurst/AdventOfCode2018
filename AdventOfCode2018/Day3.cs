@@ -7,7 +7,7 @@ namespace AdventOfCode2018
 {
     public class Day3
     {
-        private static readonly string[] _inputs = File.ReadAllText(@"Inputs/Day3.txt").Split(new String[] { "\r\n" }, StringSplitOptions.None).ToArray();
+        private static readonly string[] _inputs = File.ReadAllText(@"Inputs/Day3.txt").Split(new string[] { "\r\n" }, StringSplitOptions.None).ToArray();
         public void Run()
         {
             PartOneAndTwo();
